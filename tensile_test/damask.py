@@ -1,18 +1,20 @@
 import difflib
 import subprocess
-import rdflib
 import warnings
+from collections.abc import Callable
 from functools import cache
 from hashlib import sha256
 from pathlib import Path
-from typing import Annotated, Any, Callable
+from typing import Annotated, Any
 
 import ase
 import flowrep as fr
 import numpy as np
+import rdflib
 import requests
 import yaml
 from pyiron_snippets.files import DirectoryObject
+
 from damask import YAML, ConfigMaterial, GeomGrid, Result, Rotation, seeds
 
 
@@ -370,7 +372,7 @@ def generate_load_step(
 
 
 def generate_grid_from_voronoi_tessellation(
-    spatial_discretization: int | float | np.ndarray,
+    spatial_discretization: float | np.ndarray,
     num_grains: int,
     box_size: Annotated[float | np.ndarray, {"units": "meter"}]
 ) -> GeomGrid:
@@ -476,7 +478,7 @@ def get_material(
 def get_grid(
     num_grains: int,
     box_size: Annotated[float | np.ndarray, {"units": "meter"}],
-    spatial_discretization: int | float | np.ndarray,
+    spatial_discretization: float | np.ndarray,
 ) -> GeomGrid:
     return generate_grid_from_voronoi_tessellation(
         box_size=box_size,
