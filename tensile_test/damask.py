@@ -81,7 +81,6 @@ def _order_composition(
     return np.argsort(all_values).tolist()[::-1]
 
 
-@cache
 def list_elasticity(
     chemical_composition: str | list[str] | None = None,
     sub_folder: str = "elastic",
@@ -113,7 +112,6 @@ def list_elasticity(
     return data
 
 
-@cache
 def list_plasticity(
     chemical_composition: str | list[str] | None = None,
     sub_folder: str = "plastic",
@@ -142,6 +140,7 @@ def list_plasticity(
     return data
 
 
+@cache
 def _get_yaml(
     sub_folder: str = "",
     repo_owner: str = "damask-multiphysics",
@@ -372,7 +371,7 @@ def generate_load_step(
 
 
 def generate_grid_from_voronoi_tessellation(
-    spatial_discretization: float | np.ndarray,
+    spatial_discretization: int | float | np.ndarray,
     num_grains: int,
     box_size: Annotated[float | np.ndarray, {"units": "meter"}]
 ) -> GeomGrid:
@@ -478,7 +477,7 @@ def get_material(
 def get_grid(
     num_grains: int,
     box_size: Annotated[float | np.ndarray, {"units": "meter"}],
-    spatial_discretization: float | np.ndarray,
+    spatial_discretization: int | float | np.ndarray,
 ) -> GeomGrid:
     return generate_grid_from_voronoi_tessellation(
         box_size=box_size,
