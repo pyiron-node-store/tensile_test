@@ -371,7 +371,7 @@ def generate_load_step(
 
 
 def generate_grid_from_voronoi_tessellation(
-    spatial_discretization: float | np.ndarray,
+    spatial_discretization: int | float | np.ndarray,
     num_grains: int,
     box_size: Annotated[float | np.ndarray, {"units": "meter"}]
 ) -> GeomGrid:
@@ -477,7 +477,7 @@ def get_material(
 def get_grid(
     num_grains: int,
     box_size: Annotated[float | np.ndarray, {"units": "meter"}],
-    spatial_discretization: float | np.ndarray,
+    spatial_discretization: int | float | np.ndarray,
 ) -> GeomGrid:
     return generate_grid_from_voronoi_tessellation(
         box_size=box_size,
