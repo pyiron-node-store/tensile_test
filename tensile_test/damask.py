@@ -81,7 +81,6 @@ def _order_composition(
     return np.argsort(all_values).tolist()[::-1]
 
 
-@cache
 def list_elasticity(
     chemical_composition: str | list[str] | None = None,
     sub_folder: str = "elastic",
@@ -113,7 +112,6 @@ def list_elasticity(
     return data
 
 
-@cache
 def list_plasticity(
     chemical_composition: str | list[str] | None = None,
     sub_folder: str = "plastic",
@@ -142,6 +140,7 @@ def list_plasticity(
     return data
 
 
+@cache
 def _get_yaml(
     sub_folder: str = "",
     repo_owner: str = "damask-multiphysics",
