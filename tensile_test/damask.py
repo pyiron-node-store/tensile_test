@@ -522,7 +522,7 @@ def run_damask(
         path = Path(
             "damask_" + sha256(f"{material}_{loading}_{grid}".encode()).hexdigest()
         )
-    do = DirectoryObject(path)
+    directory_object = DirectoryObject(path)
     material.save(path / "material.yaml")
     loading.save(path / "loading.yaml")
     grid.save(path / "damask")
@@ -537,10 +537,10 @@ def run_damask(
         "damask.vti",
     ]
     process = subprocess.Popen(
-        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=do.path
+        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=directory_object.path
     )
     stdout, stderr = process.communicate()
-    return process, stdout, stderr, do
+    return process, stdout, stderr, directory_object
 
 
 def average(d: dict[str, np.ndarray]) -> np.ndarray:
@@ -548,10 +548,10 @@ def average(d: dict[str, np.ndarray]) -> np.ndarray:
 
 
 def get_results(
-    do: DirectoryObject,
+    directory_object: DirectoryObject,
     file_name: str = "damask_loading_material.hdf5",
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    results = Result(do.path / file_name)
+    results = Result(directory_object.path / file_name)
     results.add_stress_Cauchy()
     results.add_strain()
     results.add_equivalent_Mises("sigma")
@@ -626,8 +626,8 @@ def run_tensile_test(
         box_size=box_size,
         spatial_discretization=spatial_discretization,
     )
-    _process, _stdout, _stderr, do = run_damask(
+    _process, _stdout, _stderr, directory_object = run_damask(
         material=material, loading=loading, grid=grid
     )
-    stress, strain, stress_von_Mises, strain_von_Mises = get_results(do=do)
+    stress, strain, stress_von_Mises, strain_von_Mises = get_results(directory_object=directory_object)
     return stress, strain, stress_von_Mises, strain_von_Mises
