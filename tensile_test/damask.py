@@ -315,7 +315,9 @@ def generate_load_step(
     F: np.ndarray | None = None,
     dot_F: Annotated[np.ndarray | None, {"uri": URI.strain_rate}] = None,
     P: np.ndarray | None = None,
-    dot_P: Annotated[np.ndarray | None, {"units": "Pa/s", "uri": URI.stress_rate}] = None,
+    dot_P: Annotated[
+        np.ndarray | None, {"units": "Pa/s", "uri": URI.stress_rate}
+    ] = None,
     f_out: int | None = None,
     r: float | None = None,
     f_restart: int | None = None,
@@ -371,9 +373,9 @@ def generate_load_step(
 
 
 def generate_grid_from_voronoi_tessellation(
-    spatial_discretization: int | float | np.ndarray,
+    spatial_discretization: float | np.ndarray,
     num_grains: int,
-    box_size: Annotated[float | np.ndarray, {"units": "meter"}]
+    box_size: Annotated[float | np.ndarray, {"units": "meter"}],
 ) -> GeomGrid:
     if isinstance(spatial_discretization, (int, float)):
         spatial_discretization = np.array(3 * [spatial_discretization])
@@ -477,7 +479,7 @@ def get_material(
 def get_grid(
     num_grains: int,
     box_size: Annotated[float | np.ndarray, {"units": "meter"}],
-    spatial_discretization: int | float | np.ndarray,
+    spatial_discretization: float | np.ndarray,
 ) -> GeomGrid:
     return generate_grid_from_voronoi_tessellation(
         box_size=box_size,
@@ -537,7 +539,11 @@ def run_damask(
         "damask.vti",
     ]
     process = subprocess.Popen(
-        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=directory_object.path
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        cwd=directory_object.path,
     )
     stdout, stderr = process.communicate()
     return process, stdout, stderr, directory_object
@@ -629,5 +635,7 @@ def run_tensile_test(
     _process, _stdout, _stderr, directory_object = run_damask(
         material=material, loading=loading, grid=grid
     )
-    stress, strain, stress_von_Mises, strain_von_Mises = get_results(directory_object=directory_object)
+    stress, strain, stress_von_Mises, strain_von_Mises = get_results(
+        directory_object=directory_object
+    )
     return stress, strain, stress_von_Mises, strain_von_Mises
